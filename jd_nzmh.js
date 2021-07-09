@@ -45,7 +45,8 @@ if ($.isNode()) {
   }
   console.log('女装盲盒\n' +
       '活动时间：2021-7-1至2021-7-31\n' +
-      '活动地址：https://h5.m.jd.com/babelDiy/Zeus/9Z9HZWmQuwDnYKC1rzZTMpdn8ms/index.html');
+      '活动地址：https://h5.m.jd.com/babelDiy/Zeus/9Z9HZWmQuwDnYKC1rzZTMpdn8ms/index.html\n' +
+      '活动入口：京东app-女装馆-赢京豆');
   for (let i = 0; i < cookiesArr.length; i++) {
     if (cookiesArr[i]) {
       cookie = cookiesArr[i];
@@ -67,9 +68,7 @@ if ($.isNode()) {
         continue
       }
       try {
-        //await jdMh('https://h5.m.jd.com/babelDiy/Zeus/3eeruLXVbXge6CexVq8XkBbBvAfy/index.html')
         await jdMh('https://h5.m.jd.com/babelDiy/Zeus/9Z9HZWmQuwDnYKC1rzZTMpdn8ms/index.html')
-        // await jdMh('https://anmp.jd.com/babelDiy/Zeus/2nxUXjyYLz5rNJ1HL472B3KWf71C/index.html')
       } catch (e) {
         $.logErr(e)
       }
@@ -194,8 +193,6 @@ function draw() {
             if ($.prize.filter(vo => vo.prizeLevel === data.data.level).length > 0) {
               console.log(`获得${$.prize.filter(vo => vo.prizeLevel === data.data.level)[0].prizename}`)
               $.beans += $.prize.filter(vo => vo.prizeLevel === data.data.level)[0].beansPerNum
-            } else {
-              console.log(`抽奖 未中奖`)
             }
           }
         }
