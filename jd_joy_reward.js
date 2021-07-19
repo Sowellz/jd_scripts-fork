@@ -581,6 +581,10 @@
        $.isLogin = true;
        $.nickName = '';
        await TotalBean();
+       if (!require('./JS_USER_AGENTS').HelloWorld) {
+         console.log(`\n【京东账号${$.index}】${$.nickName || $.UserName}：黑号等死\n`);
+         continue
+       }
        console.log(`\n开始【京东账号${$.index}】${$.nickName || $.UserName}\n`);
        if (!$.isLogin) {
          $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
@@ -624,7 +628,7 @@
  function init() {
    return new Promise(resolve => {
      $.get({
-       url: `https://jdjoy.jd.com/common/gift/getBeanConfigs?reqSource=h5&invokeKey=NRp8OPxZMFXmGkaE`,
+       url: `https://jdjoy.jd.com/common/gift/getBeanConfigs?reqSource=h5&invokeKey=qRKHmL4sna8ZOP9F`,
        headers: {
          'Host': 'jdjoy.jd.com',
          'accept': '*/*',
@@ -653,7 +657,7 @@
    console.log('exchange()')
    return new Promise(resolve => {
      $.post({
-       url: `https://jdjoy.jd.com/common/gift/new/exchange?reqSource=h5&invokeKey=NRp8OPxZMFXmGkaE`,
+       url: `https://jdjoy.jd.com/common/gift/new/exchange?reqSource=h5&invokeKey=qRKHmL4sna8ZOP9F`,
        headers: {
          "Host": "jdjoy.jd.com",
          "Accept-Language": "zh-cn",
