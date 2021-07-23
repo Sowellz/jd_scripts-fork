@@ -1,11 +1,6 @@
 /*
- * @Author: LXK9301 https://github.com/LXK9301
- * @Date: 2021-7-4 9:15：31
- * @Last Modified by: zero205，修复做任务
- * @Last Modified time: 2021-1-22 14:27:20
- */
-/*
 东东小窝 https://gitee.com/lxk0301/jd_scripts/raw/master/jd_small_home.js
+Last Modified time: 2021-1-22 14:27:20
 现有功能：
 做日常任务任务，每日抽奖（有机会活动京豆，使用的是免费机会，不消耗WO币）
 自动使用WO币购买装饰品可以获得京豆，分别可获得5,20，50,100,200,400,700，1200京豆）
@@ -51,7 +46,13 @@ if ($.isNode()) {
   })
   if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => {};
 } else {
-  cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
+  let cookiesData = $.getdata('CookiesJD') || "[]";
+  cookiesData = jsonParse(cookiesData);
+  cookiesArr = cookiesData.map(item => item.cookie);
+  cookiesArr.reverse();
+  cookiesArr.push(...[$.getdata('CookieJD2'), $.getdata('CookieJD')]);
+  cookiesArr.reverse();
+  cookiesArr = cookiesArr.filter(item => item !== "" && item !== null && item !== undefined);
 }
 $.newShareCodes = [];
 const JD_API_HOST = 'https://lkyl.dianpusoft.cn/api';
@@ -93,8 +94,6 @@ const JD_API_HOST = 'https://lkyl.dianpusoft.cn/api';
         console.log(`\n${$.UserName} 去给自己的下一账号 ${decodeURIComponent($.newShareCodes[(i + 1) % $.newShareCodes.length]['cookie'].match(/pt_pin=(.+?);/) && $.newShareCodes[(i + 1) % $.newShareCodes.length]['cookie'].match(/pt_pin=(.+?);/)[1])}助力，助力码为 ${code}\n`)
         await createAssistUser(code, $.createAssistUserID);
       }
-      // console.log(`\n去帮助作者:LXK9301\n`)
-      await helpFriends();
     }
   }
 })()
@@ -107,7 +106,6 @@ const JD_API_HOST = 'https://lkyl.dianpusoft.cn/api';
 async function smallHome() {
   await loginHome();
   await ssjjRooms();
-  await helpFriends();
   if (!$.isUnLock) return;
   await createInviteUser();
   await queryDraw();
@@ -115,7 +113,7 @@ async function smallHome() {
   await doAllTask();
   await queryByUserId();
   await queryFurnituresCenterList();
-  // await showMsg();
+  await showMsg();
 }
 function showMsg() {
   return new Promise(resolve => {
@@ -138,17 +136,6 @@ async function doChannelsListTask(taskId, taskType) {
       await $.wait(1000)
       await followChannel(taskId, item.id)
       await queryDoneTaskRecord(taskId, taskType);
-    }
-  }
-}
-async function helpFriends() {
-  await updateInviteCode();
-  // if (!$.inviteCodes) await updateInviteCodeCDN();
-  await updateInviteCodeCDN('https://cdn.jsdelivr.net/gh/zero205/updateTeam@main/shareCodes/jd_updateSmallHomeInviteCode.json');
-  if ($.inviteCodes && $.inviteCodes['inviteCode']) {
-    for (let item of $.inviteCodes.inviteCode) {
-      if (!item) continue
-      await createAssistUser(item, $.createAssistUserID);
     }
   }
 }
@@ -518,7 +505,7 @@ function createInviteUser() {
 }
 
 function createAssistUser(inviteId, taskId) {
-  console.log(`${inviteId}, ${taskId}`, `${cookie}`);
+  console.log(`${inviteId}, ${taskId}`);
   return new Promise(resolve => {
     $.get(taskUrl(`/ssjj-task-record/createAssistUser/${inviteId}/${taskId}`), (err, resp, data) => {
       try {
@@ -688,7 +675,7 @@ function ssjjRooms() {
               $.isUnLock = data.body.isUnLock;
               if (!$.isUnLock) {
                 console.log(`京东账号${$.index}${$.nickName}未开启此活动\n`);
-                // $.msg($.name, '', `京东账号${$.index}${$.nickName}未开启此活动\n点击弹窗去开启此活动(￣▽￣)"`, {"open-url": "openjd://virtual?params=%7B%20%22category%22:%20%22jump%22,%20%22des%22:%20%22m%22,%20%22url%22:%20%22https://h5.m.jd.com/babelDiy/Zeus/2HFSytEAN99VPmMGZ6V4EYWus1x/index.html%22%20%7D"});
+                $.msg($.name, '', `京东账号${$.index}${$.nickName}未开启此活动\n点击弹窗去开启此活动(￣▽￣)"`, {"open-url": "openjd://virtual?params=%7B%20%22category%22:%20%22jump%22,%20%22des%22:%20%22m%22,%20%22url%22:%20%22https://h5.m.jd.com/babelDiy/Zeus/2HFSytEAN99VPmMGZ6V4EYWus1x/index.html%22%20%7D"});
               }
             }
           }
@@ -727,7 +714,7 @@ function loginHome() {
         } else {
           if (safeGet(data)) {
             data = JSON.parse(data);
-            await login(data.data.lkEPin);
+            await login(data.data);
           }
         }
       } catch (e) {
@@ -738,13 +725,12 @@ function loginHome() {
     })
   })
 }
-
 function login(userName) {
   return new Promise(resolve => {
     const body = {
       "body": {
         "client": 2,
-        userName
+        "userName":userName.lkEPin
       }
     };
     const options = {
@@ -765,6 +751,7 @@ function login(userName) {
     $.post(options, async (err, resp, data) => {
       try {
         if (err) {
+          console.log(body)
           console.log(`${JSON.stringify(err)}`)
           console.log(`${$.name} API请求失败，请检查网路重试`)
         } else {
@@ -782,12 +769,18 @@ function login(userName) {
     })
   })
 }
-function updateInviteCode(url = 'https://cdn.jsdelivr.net/gh/zero205/updateTeam@main/shareCodes/jd_updateSmallHomeInviteCode.json') {
+function updateInviteCode(url = 'https://wuzhi03.coding.net/p/dj/d/shareCodes/git/raw/main/jd_updateSmallHomeInviteCode.json') {
   return new Promise(resolve => {
-    $.get({url}, async (err, resp, data) => {
+    $.get({url,headers:{
+        "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1 Edg/87.0.4280.88"
+      }}, (err, resp, data) => {
       try {
         if (err) {
           console.log(`${JSON.stringify(err)}`)
+          console.log(`${$.name} API请求失败，将切换为备用API`)
+          console.log(`随机取助力码放到您固定的互助码后面(不影响已有固定互助)`)
+          $.get({url: `https://raw.githubusercontent.com/shuyeshuye/updateTeam/master/shareCodes/jd_updateSmallHomeInviteCode.json`, 'timeout': 10000},(err, resp, data)=>{
+            $.inviteCodes = JSON.parse(data);})
         } else {
           $.inviteCodes = JSON.parse(data);
         }
@@ -797,26 +790,6 @@ function updateInviteCode(url = 'https://cdn.jsdelivr.net/gh/zero205/updateTeam@
         resolve();
       }
     })
-  })
-}
-function updateInviteCodeCDN(url) {
-  return new Promise(async resolve => {
-    $.get({url, headers:{"User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;android;9.3.6;9;8363532363230343238303836333-43D2468336563316936636265356;network/wifi;model/MI 8;addressid/2688971613;aid/07aa8a790ce0988b;oaid/451bb37844a58e7f;osVer/28;appBuild/86560;partner/xiaomi001;eufv/1;jdSupportDarkMode/0;Mozilla/5.0 (Linux; Android 9; MI 8 Build/PKQ1-wesley_iui-19.09.05; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/66.0.3359.126 MQQBrowser/6.2 TBS/045131 Mobile Safari/537.36")}}, async (err, resp, data) => {
-      try {
-        if (err) {
-          console.log(`${JSON.stringify(err)}`)
-          console.log(`${$.name} API请求失败，请检查网路重试`)
-        } else {
-          $.inviteCodes = JSON.parse(data);
-        }
-      } catch (e) {
-        $.logErr(e, resp)
-      } finally {
-        resolve();
-      }
-    })
-    await $.wait(3000)
-    resolve();
   })
 }
 function taskUrl(url, body = {}) {
@@ -852,7 +825,7 @@ function taskPostUrl(url) {
   }
 }
 function sortByjdBeanNum(a, b) {
-  return b['jdBeanNum'] - a['jdBeanNum'];
+  return a['jdBeanNum'] - b['jdBeanNum'];
 }
 function TotalBean() {
   return new Promise(async resolve => {
@@ -882,7 +855,7 @@ function TotalBean() {
               return
             }
             if (data['retcode'] === 0) {
-              $.nickName = (data['base'] && data['base'].nickname) || $.UserName;
+              $.nickName = data['base'].nickname;
             } else {
               $.nickName = $.UserName
             }

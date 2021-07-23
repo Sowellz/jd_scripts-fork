@@ -29,56 +29,56 @@ message = ""
 $.shareuuid = "8cec00a4917e4af6ae49f8f4f9e7b58d"
 $.actid = "aae88e19901340a28b604f5cf5b61dd6"
 !(async () => {
-        if (!cookiesArr[0]) {
-            $.msg($.name, '【提示】请先获取cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/', {
-                "open-url": "https://bean.m.jd.com/"
-            });
-            return;
-        }
-        for (let i = 0; i < cookiesArr.length; i++) {
-            cookie = cookiesArr[i];
-            if (cookie) {
-                $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
-                $.index = i + 1;
-                $.cando = true
-                $.cow = ""
-                $.openCard = true
-                $.isLogin = true;
-                $.needhelp = true
-                $.foodNum = 0
-                $.nickName = '';
-                $.drawresult = ""
-                $.exchange = 0
-                console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
-                if (!$.isLogin) {
-                    $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, {
-                        "open-url": "https://bean.m.jd.com/bean/signIndex.action"
-                    });
-                    if ($.isNode()) {
-                        await notify.sendNotify(`${$.name}cookie已失效 - ${$.UserName}`, `京东账号${$.index} ${$.UserName}\n请重新登录获取cookie`);
-                    }
-                    continue
+    if (!cookiesArr[0]) {
+        $.msg($.name, '【提示】请先获取cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/', {
+            "open-url": "https://bean.m.jd.com/"
+        });
+        return;
+    }
+    for (let i = 0; i < cookiesArr.length; i++) {
+        cookie = cookiesArr[i];
+        if (cookie) {
+            $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
+            $.index = i + 1;
+            $.cando = true
+            $.cow = ""
+            $.openCard = true
+            $.isLogin = true;
+            $.needhelp = true
+            $.foodNum = 0
+            $.nickName = '';
+            $.drawresult = ""
+            $.exchange = 0
+            console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
+            if (!$.isLogin) {
+                $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, {
+                    "open-url": "https://bean.m.jd.com/bean/signIndex.action"
+                });
+                if ($.isNode()) {
+                    await notify.sendNotify(`${$.name}cookie已失效 - ${$.UserName}`, `京东账号${$.index} ${$.UserName}\n请重新登录获取cookie`);
                 }
-                await genToken()
-                await getActCk()
-                await getToken2()
-                await getshopid()
-                await getMyPin()
-                await adlog()
-                await getActinfo()
-                if($.taskList&&!$.fd3){
+                continue
+            }
+            await genToken()
+            await getActCk()
+            await getToken2()
+            await getshopid()
+            await getMyPin()
+            await adlog()
+            await getActinfo()
+            if($.taskList&&!$.fd3){
                 if($.energy<100) await getask()
                 await getActinfo(true)
                 console.log("去抽福袋...")
                 if($.energy>=30 && !$.fd1) await dotask("startDraw","&drawType=01")
                 if($.energy>=60 && !$.fd2) await dotask("startDraw","&drawType=02")
                 if($.energy>=100 && !$.fd3) await dotask("startDraw","&drawType=03")
-             }  else{
-            console.log("你已经开满啦")              
-             } 
+            }  else{
+                console.log("你已经开满啦")
             }
         }
-    })()
+    }
+})()
     .catch((e) => $.logErr(e))
     .finally(() => $.done())
 //获取活动信息
@@ -287,12 +287,12 @@ function getActinfo(end) {
                             let actorinfo = data.data.actorInfo
                             let date = new Date(actinfo.endTime)
                             let endtime = date.getFullYear() + "-" + (date.getMonth() < 10 ? '0' + (date.getMonth() + 1) : (date.getMonth() + 1)) + "-" + (date.getDate() < 10 ? '0' + date.getDate() : date.getDate())
-                           if(!end){
-                            console.log(actinfo.actName + "  ：  " + actinfo.shopName)
-                            console.log("结束时间：" + endtime)
-                            $.uuid = actorinfo.uuid        
-                            $.taskList = data.data
-                            $.follow = actorinfo.follow
+                            if(!end){
+                                console.log(actinfo.actName + "  ：  " + actinfo.shopName)
+                                console.log("结束时间：" + endtime)
+                                $.uuid = actorinfo.uuid
+                                $.taskList = data.data
+                                $.follow = actorinfo.follow
                             }
                             $.fd1 = actorinfo.prizeOneStatus
                             $.fd2 = actorinfo.prizeTwoStatus
@@ -300,7 +300,7 @@ function getActinfo(end) {
                             console.log(`福袋1 ${actorinfo.prizeOneStatus} 福袋2 ${actorinfo.prizeTwoStatus} 福袋3 ${actorinfo.prizeThreeStatus}`)
                             console.log(actorinfo.nicknameShow + "：" +( actorinfo.energyValue +actorinfo.fansLoveValue)+ "福气值")
                             $.energy =  actorinfo.energyValue +actorinfo.fansLoveValue
-                    
+
 
                         }
                     }
@@ -338,12 +338,12 @@ async function getask() {
             if (o == 3) {
                 await dotask("doShareTask")
                 await dotask("doShareTask")
-            }            
+            }
         }
     }
     if(!$.follow){
-   console.log("去做任务：followShop")
-   await dotask("followShop")
+        console.log("去做任务：followShop")
+        await dotask("followShop")
     }
 }
 
@@ -357,11 +357,11 @@ function dotask(id, body) {
                 } else {
                     let info = JSON.parse(data)
                     if(info&&info.result){
-                  console.log(`    操作结果：${info.result}`)                    
-                   if(id =="startDraw"){
-                  if(info.data.drawOk){console.log(`    抽奖成功,活动 ${info.data.drawInfo.name}`)}else{console.log(JSON.stringify(info))}
-                   }           
-                }
+                        console.log(`    操作结果：${info.result}`)
+                        if(id =="startDraw"){
+                            if(info.data.drawOk){console.log(`    抽奖成功,活动 ${info.data.drawInfo.name}`)}else{console.log(JSON.stringify(info))}
+                        }
+                    }
                 }
             } catch (e) {
                 $.logErr(e, resp)
