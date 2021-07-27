@@ -2,9 +2,9 @@
 50 23 */3 * * rm -rf /scripts/logs/*.log
 
 #燃动夏季脚本更新_做任务
-12 0,6-23/2 * * * wget -O /scripts/jd_summer_movement.js https://raw.githubusercontent.com/smiek2221/scripts/master/jd_summer_movement.js
+12 0,6-23/2 * * * wget -O /scripts/jd_summer_movement.js https://ghproxy.com/https://raw.githubusercontent.com/smiek2221/scripts/master/jd_summer_movement.js
 #燃动夏季脚本更新_助力
-12 7-23 * * * wget -O /scripts/jd_summer_movement_help.js https://raw.githubusercontent.com/smiek2221/scripts/master/jd_summer_movement_help.js
+12 7-23 * * * wget -O /scripts/jd_summer_movement_help.js https://ghproxy.com/https://raw.githubusercontent.com/smiek2221/scripts/master/jd_summer_movement_help.js
 
 ##############短期活动##############
 
