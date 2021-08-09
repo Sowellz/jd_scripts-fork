@@ -1,10 +1,8 @@
 # 每3天的23:50分清理一次日志
 50 23 */3 * * rm -rf /scripts/logs/*.log
 
-#点点券更新
-22 7-23 * * * wget -O /scripts/ZooFaker_Necklace.js https://ghproxy.com/https://raw.githubusercontent.com/smiek2221/scripts/master/ZooFaker_Necklace.js
-#点点券更新
-25 7-23 * * * wget -O /scripts/jd_necklace.js https://raw.githubusercontent.com/smiek2221/scripts/master/jd_necklace.js
+#同步smiek2221大佬仓库
+0 */4 * * * sh /scripts/docker/rsync_smiek2221.sh
 
 ##############短期活动##############
 
