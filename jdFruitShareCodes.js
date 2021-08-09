@@ -7,16 +7,11 @@
 // 同一个京东账号的好友互助码用@符号隔开,不同京东账号之间用&符号或者换行隔开,下面给一个示例
 // 如: 京东账号1的shareCode1@京东账号1的shareCode2&京东账号2的shareCode1@京东账号2的shareCode2
 let FruitShareCodes = [
-'1b0f3cb476b54ec8b8bd66b129512abc'
+  'ff67ae74d1c14d8eb6320a1b817811a1@16c8d6f9ff7d40cbbd272e54b447d8bc@070abe69a9dc404d899323a7f4367ecf@4dc26d895c2f4031bfa4862c5e98a697@a834b369f84b4a3b907299b40893e78f@2fe220e0a9c14f249641f9e63bbe1f27',
+  'ff67ae74d1c14d8eb6320a1b817811a1@16c8d6f9ff7d40cbbd272e54b447d8bc@070abe69a9dc404d899323a7f4367ecf@4dc26d895c2f4031bfa4862c5e98a697@a834b369f84b4a3b907299b40893e78f@2fe220e0a9c14f249641f9e63bbe1f27',
+  'ff67ae74d1c14d8eb6320a1b817811a1@16c8d6f9ff7d40cbbd272e54b447d8bc@070abe69a9dc404d899323a7f4367ecf@4dc26d895c2f4031bfa4862c5e98a697@a834b369f84b4a3b907299b40893e78f@2fe220e0a9c14f249641f9e63bbe1f27',
 ]
-
-// 从日志获取互助码
-// const logShareCodes = require('./utils/jdShareCodes');
-// if (logShareCodes.FRUITSHARECODES.length > 0 && !process.env.FRUITSHARECODES) {
-//   process.env.FRUITSHARECODES = logShareCodes.FRUITSHARECODES.join('&');
-// }
-
-// 判断github action里面是否有东东农场互助码
+// 判断github action里面是否有水果互助码
 if (process.env.FRUITSHARECODES) {
   if (process.env.FRUITSHARECODES.indexOf('&') > -1) {
     console.log(`您的东东农场互助码选择的是用&隔开\n`)
@@ -27,8 +22,8 @@ if (process.env.FRUITSHARECODES) {
   } else {
     FruitShareCodes = process.env.FRUITSHARECODES.split();
   }
-} else {
-  console.log(`由于您环境变量(FRUITSHARECODES)里面未提供助力码，故此处运行将会给脚本内置的码进行助力，请知晓！`)
+} else if (process.env.JD_COOKIE) {
+  console.log(`由于您secret里面未提供助力码，故此处运行将会给脚本内置的码进行助力，请知晓！`)
 }
 for (let i = 0; i < FruitShareCodes.length; i++) {
   const index = (i + 1 === 1) ? '' : (i + 1);

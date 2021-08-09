@@ -7,16 +7,11 @@
 // 同一个京东账号的好友互助码用@符号隔开,不同京东账号之间用&符号或者换行隔开,下面给一个示例
 // 如: 京东账号1的shareCode1@京东账号1的shareCode2&京东账号2的shareCode1@京东账号2的shareCode2
 let shareCodes = [
-  'T018v_VxQxkZ_FXVJBqb1ACjVWnYaS5kRrbA'//账号一的好友shareCode,不同好友中间用@符号隔开
+  'T0129KUiHklIsQiCCjVWnYaS5kRrbA@T0225KkcRh9I8lPSIhinkfcIdgCjVWnYaS5kRrbA@T012aFb9lZ6mI8t0CjVWnYaS5kRrbA@T0225KkcRR0e8ACEIx_2wvYKcACjVWnYaS5kRrbA@T0225KkcRhoa8AaEIU7zlvYIfQCjVWnYaS5kRrbA@T0225KkcR0we_FbTKB32k_QDdACjVWnYaS5kRrbA',
+  'T0129KUiHklIsQiCCjVWnYaS5kRrbA@T0225KkcRh9I8lPSIhinkfcIdgCjVWnYaS5kRrbA@T012aFb9lZ6mI8t0CjVWnYaS5kRrbA@T0225KkcRR0e8ACEIx_2wvYKcACjVWnYaS5kRrbA@T0225KkcRhoa8AaEIU7zlvYIfQCjVWnYaS5kRrbA@T0225KkcR0we_FbTKB32k_QDdACjVWnYaS5kRrbA',
+  'T0129KUiHklIsQiCCjVWnYaS5kRrbA@T0225KkcRh9I8lPSIhinkfcIdgCjVWnYaS5kRrbA@T012aFb9lZ6mI8t0CjVWnYaS5kRrbA@T0225KkcRR0e8ACEIx_2wvYKcACjVWnYaS5kRrbA@T0225KkcRhoa8AaEIU7zlvYIfQCjVWnYaS5kRrbA@T0225KkcR0we_FbTKB32k_QDdACjVWnYaS5kRrbA',
 ]
-
-// 从日志获取互助码
-// const logShareCodes = require('./utils/jdShareCodes');
-// if (logShareCodes.DDFACTORY_SHARECODES.length > 0 && !process.env.DDFACTORY_SHARECODES) {
-//   process.env.DDFACTORY_SHARECODES = logShareCodes.DDFACTORY_SHARECODES.join('&');
-// }
-
-// 判断环境变量里面是否有东东工厂互助码
+// 判断github action里面是否有东东工厂互助码
 if (process.env.DDFACTORY_SHARECODES) {
   if (process.env.DDFACTORY_SHARECODES.indexOf('&') > -1) {
     console.log(`您的互助码选择的是用&隔开\n`)
@@ -27,8 +22,8 @@ if (process.env.DDFACTORY_SHARECODES) {
   } else {
     shareCodes = process.env.DDFACTORY_SHARECODES.split();
   }
-} else {
-  console.log(`由于您环境变量(DDFACTORY_SHARECODES)里面未提供助力码，故此处运行将会给脚本内置的码进行助力，请知晓！`)
+} else if (process.env.DDFACTORY_SHARECODES) {
+  console.log(`由于您secret里面未提供助力码，故此处运行将会给脚本内置的码进行助力，请知晓！`)
 }
 for (let i = 0; i < shareCodes.length; i++) {
   const index = (i + 1 === 1) ? '' : (i + 1);

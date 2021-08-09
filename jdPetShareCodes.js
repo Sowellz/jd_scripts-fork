@@ -7,15 +7,10 @@
 // 同一个京东账号的好友互助码用@符号隔开,不同京东账号之间用&符号或者换行隔开,下面给一个示例
 // 如: 京东账号1的shareCode1@京东账号1的shareCode2&京东账号2的shareCode1@京东账号2的shareCode2
 let PetShareCodes = [
-'MTE1NDQ5OTIwMDAwMDAwNDI2MzQ5MDk'
+  'MTAxODc2NTE0NzAwMDAwMDAyNjY0MDU3OQ==@MTAxODc2NTEzOTAwMDAwMDAyNjY0MDMxOQ==@MTE1NDAxNzYwMDAwMDAwMzc4MzM1NTM=@MTE1NDQ5MzYwMDAwMDAwNDMyNjgxNzM=@MTE1NDUyMjEwMDAwMDAwMzk4MzY1ODk=@MTE1NDY3NTIwMDAwMDAwNTI2OTEyMDU=',
+  'MTAxODc2NTE0NzAwMDAwMDAyNjY0MDU3OQ==@MTAxODc2NTEzOTAwMDAwMDAyNjY0MDMxOQ==@MTE1NDAxNzYwMDAwMDAwMzc4MzM1NTM=@MTE1NDQ5MzYwMDAwMDAwNDMyNjgxNzM=@MTE1NDUyMjEwMDAwMDAwMzk4MzY1ODk=@MTE1NDY3NTIwMDAwMDAwNTI2OTEyMDU=',
+  'MTAxODc2NTE0NzAwMDAwMDAyNjY0MDU3OQ==@MTAxODc2NTEzOTAwMDAwMDAyNjY0MDMxOQ==@MTE1NDAxNzYwMDAwMDAwMzc4MzM1NTM=@MTE1NDQ5MzYwMDAwMDAwNDMyNjgxNzM=@MTE1NDUyMjEwMDAwMDAwMzk4MzY1ODk=@MTE1NDY3NTIwMDAwMDAwNTI2OTEyMDU=',
 ]
-
-// 从日志获取互助码
-// const logShareCodes = require('./utils/jdShareCodes');
-// if (logShareCodes.PETSHARECODES.length > 0 && !process.env.PETSHARECODES) {
-//   process.env.PETSHARECODES = logShareCodes.PETSHARECODES.join('&');
-// }
-
 // 判断github action里面是否有东东萌宠互助码
 if (process.env.PETSHARECODES) {
   if (process.env.PETSHARECODES.indexOf('&') > -1) {
@@ -27,8 +22,8 @@ if (process.env.PETSHARECODES) {
   } else {
     PetShareCodes = process.env.PETSHARECODES.split();
   }
-} else {
-  console.log(`由于您环境变量(PETSHARECODES)里面未提供助力码，故此处运行将会给脚本内置的码进行助力，请知晓！`)
+} else if (process.env.JD_COOKIE) {
+  console.log(`由于您secret里面未提供助力码，故此处运行将会给脚本内置的码进行助力，请知晓！`)
 }
 for (let i = 0; i < PetShareCodes.length; i++) {
   const index = (i + 1 === 1) ? '' : (i + 1);
