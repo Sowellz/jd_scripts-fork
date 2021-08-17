@@ -3,7 +3,7 @@
  * 如需运行请自行添加环境变量：JD_TRY，值填 true 即可运行
  * TG交流群：https://t.me/jd_zero205
  * TG通知频道：https://t.me/jd_zero205_tz
- *
+ * 
 update 2021/6/7
 京东试用：脚本更新地址 https://raw.githubusercontent.com/ZCY01/daily_scripts/main/jd/jd_try.js
 脚本兼容: QuantumultX, Node.js

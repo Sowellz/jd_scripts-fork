@@ -29,9 +29,12 @@ let cookiesArr = [], cookie = '', jdFruitShareArr = [], isBox = false, notify, n
 //此此内容是IOS用户下载脚本到本地使用，填写互助码的地方，同一京东账号的好友互助码请使用@符号隔开。
 //下面给出两个账号的填写示例（iOS只支持2个京东账号）
 let shareCodes = [ // 这个列表填入你要助力的好友的shareCode
-  'ff67ae74d1c14d8eb6320a1b817811a1@16c8d6f9ff7d40cbbd272e54b447d8bc@070abe69a9dc404d899323a7f4367ecf@4dc26d895c2f4031bfa4862c5e98a697@a834b369f84b4a3b907299b40893e78f@2fe220e0a9c14f249641f9e63bbe1f27',
-  'ff67ae74d1c14d8eb6320a1b817811a1@16c8d6f9ff7d40cbbd272e54b447d8bc@070abe69a9dc404d899323a7f4367ecf@4dc26d895c2f4031bfa4862c5e98a697@a834b369f84b4a3b907299b40893e78f@2fe220e0a9c14f249641f9e63bbe1f27',
-  'ff67ae74d1c14d8eb6320a1b817811a1@16c8d6f9ff7d40cbbd272e54b447d8bc@070abe69a9dc404d899323a7f4367ecf@4dc26d895c2f4031bfa4862c5e98a697@a834b369f84b4a3b907299b40893e78f@2fe220e0a9c14f249641f9e63bbe1f27',
+  //账号一的好友shareCode,不同好友的shareCode中间用@符号隔开
+  '0a74407df5df4fa99672a037eec61f7e@dbb21614667246fabcfd9685b6f448f3@6fbd26cc27ac44d6a7fed34092453f77@61ff5c624949454aa88561f2cd721bf6@56db8e7bc5874668ba7d5195230d067a@b9d287c974cc498d94112f1b064cf934@23b49f5a106b4d61b2ea505d5a4e1056@8107cad4b82847a698ca7d7de9115f36@35fcfda6d3af48e7afe79f5e18a39e55@5a41b6db624346cdbe347b61279fda8f@3fa4d41fe66e47bd8a9549e33e3b9b54@5dc8a7b9f4544a8ca79f8cf62d0c7623@4918db5a466c4332843c75064a5a3880@b48561c90c8c45f5b355034629715a80',
+  //账号二的好友shareCode,不同好友的shareCode中间用@符号隔开
+  'b1638a774d054a05a30a17d3b4d364b8@f92cb56c6a1349f5a35f0372aa041ea0@9c52670d52ad4e1a812f894563c746ea@8175509d82504e96828afc8b1bbb9cb3@2673c3777d4443829b2a635059953a28@d2d5d435675544679413cb9145577e0f@35fcfda6d3af48e7afe79f5e18a39e55@5a41b6db624346cdbe347b61279fda8f@3fa4d41fe66e47bd8a9549e33e3b9b54@5dc8a7b9f4544a8ca79f8cf62d0c7623@4918db5a466c4332843c75064a5a3880@b48561c90c8c45f5b355034629715a80',
+  //账号三的好友shareCode,不同好友的shareCode中间用@符号隔开
+  '35fcfda6d3af48e7afe79f5e18a39e55@5a41b6db624346cdbe347b61279fda8f@3fa4d41fe66e47bd8a9549e33e3b9b54@5dc8a7b9f4544a8ca79f8cf62d0c7623@4918db5a466c4332843c75064a5a3880@b48561c90c8c45f5b355034629715a80',
 ]
 let message = '', subTitle = '', option = {}, isFruitFinished = false;
 const retainWater = 100;//保留水滴大于多少g,默认100g;
@@ -67,6 +70,7 @@ const urlSchema = `openjd://virtual?params=%7B%20%22category%22:%20%22jump%22,%2
       subTitle = '';
       option = {};
       await shareCodesFormat();
+      $.retry = 0;
       await jdFruit();
     }
   }
@@ -119,9 +123,12 @@ async function jdFruit() {
       await predictionFruit();//预测水果成熟时间
     } else {
       console.log(`初始化农场数据异常, 请登录京东 app查看农场0元水果功能是否正常,农场初始化数据: ${JSON.stringify($.farmInfo)}`);
-      console.log(`等待10秒后重试`);
-      await $.wait(10000);
-      await jdFruit();
+      if($.retry < 3){
+        $.retry++
+        console.log(`等待10秒后重试,第:${$.retry}次`);
+        await $.wait(10000);
+        await jdFruit();
+      }
     }
   } catch (e) {
     console.log(`任务执行异常，请检查执行日志 ‼️‼️`);
