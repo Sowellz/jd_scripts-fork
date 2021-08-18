@@ -1,0 +1,3 @@
+jd_plantBean.js
+jd_pet.js
+jd_fruit.js
