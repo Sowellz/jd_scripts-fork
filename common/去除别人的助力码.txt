@@ -1,3 +1,4 @@
 jd_plantBean.js
 jd_pet.js
 jd_fruit.js
+jd_lsj.js
